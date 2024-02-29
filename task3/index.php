@@ -57,7 +57,7 @@ if (empty($email)) {
   $errors = TRUE;
 }
 function validating($phone){
-    if(preg_match('/^[0-9]{10}+$/', $phone)) {
+    if(preg_match('/^[0-9]{11}+$/', $phone)) {
     print(' Valid Phone Number');
     } else {
     print('Invalid Phone Number');
