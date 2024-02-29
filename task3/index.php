@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 $name = $_POST['name'];
 $email = $_POST['email'];
+$phone= $_POST['phone'];
 $year = $_POST['year'];
 $month=$_POST['month'];
 $day=$_POST['day'];
