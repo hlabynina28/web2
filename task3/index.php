@@ -18,7 +18,7 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $year = $_POST['year'];
 $month=$_POST['month'];
-$day=$_POST['day']
+$day=$_POST['day'];
 $sex = $_POST['sex'];
 $biography = $_POST['biography'];
 $checkboxContract = isset($_POST['checkboxContract']);
@@ -69,7 +69,7 @@ if (empty($phone)) {
         Заполните телефон.
       </h3>');
     $errors = TRUE;
-  } else validating($phone)
+  } else validating($phone);
 
 if (!is_numeric($year)) {
   print('
@@ -130,6 +130,7 @@ if ($checkboxContract == '') {
   $errors = TRUE;
 }
 
+
 if ($errors) {
   exit();
 }
@@ -140,7 +141,7 @@ $db = new PDO('mysql:host=localhost;dbname=u59174', $user, $pass, array(PDO::ATT
 
 try {
   $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, biography) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
-  $stmt->execute([$name, $phone, $email, $day, %month, $year, $sex, $biography]);
+  $stmt->execute([$name, $phone, $email, $day, $month, $year, $sex, $biography]);
   $application_id = $db->lastInsertId();
   $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
   foreach ($lang as $lan) {
@@ -152,4 +153,3 @@ try {
 }
 header('Location: ?save=1');
 ?>
-
