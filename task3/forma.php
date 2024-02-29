@@ -12,7 +12,7 @@
 <body>
   <form action="" method="POST">
     <div class="form-head">
-        <h1>Форма</h1>
+        <h1>Форма!</h1>
     </div>
 
     <div class="form-content">
@@ -25,7 +25,7 @@
       <div class="form-item">
         <label for="phone"> Телефон</label>
         <input type="tel" id="tel" name="tel"/>
-      </div>  
+      </div>
 
       <div class="d-item">
          <label for="email">Email:</label>
@@ -58,7 +58,7 @@
             <div class="d-item">
                 <span>Год рождения:</span>
                     <select name="year">
-                        <?php 
+                        <?php
                         for ($i = 2023; $i >= 1900; $i--) {
                             printf('<option value="%d">%d год</option>', $i, $i);
                         }

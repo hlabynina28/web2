@@ -24,7 +24,7 @@ $biography = $_POST['biography'];
 $checkboxContract = isset($_POST['checkboxContract']);
 if(isset($_POST["lang"])) {
     $lang = $_POST["lang"];
-    $filtred_lang = array_filter($lang, 
+    $filtred_lang = array_filter($lang,
     function($value) {
         return($value == 'Python' || $value == 'JS' || $value == 'C++'||$value =='PHP'||$value =='Java');
     }
@@ -119,7 +119,7 @@ if (empty($biography)) {
     </h1>
   <br/>');
   $errors = TRUE;
-} 
+}
 
 if ($checkboxContract == '') {
   print('
