@@ -61,7 +61,7 @@ function validating($phone){
     if(!preg_match('/^(8|\+7)[-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/', $phone)) {
     // print(' Valid Phone Number');
     // } else {
-    print('Invalid Phone Number');
+    print('Invalid Phone Number!');
     }
     }
 if (empty($phone)) {
