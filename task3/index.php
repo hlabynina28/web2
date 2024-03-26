@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 $name = $_POST['name'];
 $email = $_POST['email'];
-$phone= $_POST['phone'];
+$phone= $_POST['tel'];
 $year = $_POST['year'];
 $month=$_POST['month'];
 $day=$_POST['day'];
@@ -58,9 +58,9 @@ if (empty($email)) {
   $errors = TRUE;
 }
 function validating($phone){
-    if(preg_match('/^[0-9]{11}+$/', $phone)) {
-    print(' Valid Phone Number');
-    } else {
+    if(!preg_match('/^(8|\+7)[-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/', $phone)) {
+    // print(' Valid Phone Number');
+    // } else {
     print('Invalid Phone Number');
     }
     }
