@@ -144,10 +144,10 @@ try {
   $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, biography) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
   $stmt->execute([$name, $phone, $email, $day, $month, $year, $sex, $biography]);
   $application_id = $db->lastInsertId();
-  $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
-  foreach ($lang as $lan) {
-    $stmt->execute([$application_id, $lan]);
-  }
+  // $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
+  // foreach ($lang as $lan) {
+  //   $stmt->execute([$application_id, $lan]);
+  // }
 } catch (PDOException $e) {
   print('Error : ' . $e->getMessage());
   exit();
