@@ -141,7 +141,7 @@ $pass = '4061054';
 $db = new PDO('mysql:host=localhost;dbname=u59174', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
 
 try {
-  $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, biography) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
+  $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, bio) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
   $stmt->execute([$name, $phone, $email, $day, $month, $year, $sex, $biography]);
   $application_id = $db->lastInsertId();
   // $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
