@@ -75,7 +75,7 @@
             </div>
             
             <div class="d-item">
-                <span  <?php if ($errors['year']) {print 'class="error"';} ?>>Год рождения:</span>
+                <span  <?php if ($errors['year1']||$errors['year2']) {print 'class="error"';} ?>>Год рождения:</span>
                     <select name="year">
                         <?php
                         for ($i = 2023; $i >= 1900; $i--) {
