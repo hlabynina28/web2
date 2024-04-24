@@ -209,7 +209,7 @@ $db = new PDO('mysql:host=localhost;dbname=u59174', $user, $pass, array(PDO::ATT
 
 try {
   $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, bio) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
-  $stmt->execute([$name, $phone, $email, $day, $month, $year, $sex, $biography]);
+  $stmt->execute([$name, $tel, $email, $day, $month, $year, $sex, $biography]);
   $application_id = $db->lastInsertId();
   $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
   foreach ($lang as $lan) {
