@@ -15,52 +15,75 @@
         <h1>Форма!</h1>
     </div>
 
+    <?php
+    if (!empty($messages)) {
+      print('<div id="messages">');
+      // Выводим все сообщения.
+      foreach ($messages as $message) {
+        print($message);
+      }
+      print('</div>');
+    }
+    ?>
+
     <div class="form-content">
         
       <div class="form-item">
-        <label for="name"> ФИО</label>
-        <input type="text" id="name" name="name"/>
+        <p <?php if ($errors['name']) {print 'class="error"';} ?>> Name</p>
+        <input class="line" name="name" value="<?php echo $values['name']; ?>" />
       </div>
 
       <div class="form-item">
-        <label for="phone"> Телефон</label>
-        <input type="tel" id="tel" name="tel"/>
+        <p <?php if ($errors['tel']) {print 'class="error"';} ?>> Telephone</p>
+        <input type="tel" id="tel" name="tel" value="<?php echo $values['tel'];?>" />
       </div>
 
-      <div class="d-item">
-         <label for="email">Email:</label>
-         <input type="email" id="email" name="email" />
+      <div class="form-item">
+         <p <?php if  ($errors['email1'] || $errors['email2']) {print 'class="error"';} ?>>Email</p>
+         <input class="line" name="email" value="<?php print $values['email']; ?>" />
       </div>
 
       <div class="form-item">
             <div class="d-item">
-                <span>Число:</span>
+                <span <?php if ($errors['day']) {print 'class="error"';} ?>>Число:</span>
                     <select name="day">
                     <?php
                     for ($i = 1; $i < 32; $i++) {
-                        printf('<option value="%d">%d </option>', $i, $i);
+                      if ($i == $values['day']) {
+                        printf('<option selected value="%d">%d день</option>', $i, $i);
+                      } else {
+                      printf('<option value="%d">%d день</option>', $i, $i);
+                      }
                     }
                     ?>
                     </select>
             </div>
             
             <div class="d-item">
-                <span>Месяц:</span>
+                <span  <?php if ($errors['month']) {print 'class="error"';} ?>> Месяц:</span>
                     <select name="month">
                     <?php
                     for ($i = 1; $i < 13; $i++) {
-                        printf('<option value="%d">%d </option>', $i, $i);
+                      if ($i == $values['month']) {
+                        printf('<option selected value="%d">%d месяц</option>', $i, $i);
+                      } else {
+                      printf('<option value="%d">%d месяц</option>', $i, $i);
+                      }
                     }
                     ?>
                     </select>
             </div>
             
             <div class="d-item">
-                <span>Год рождения:</span>
+                <span  <?php if ($errors['year']) {print 'class="error"';} ?>>Год рождения:</span>
                     <select name="year">
                         <?php
                         for ($i = 2023; $i >= 1900; $i--) {
-                            printf('<option value="%d">%d год</option>', $i, $i);
+                          if ($i == $values['year']) {
+                            printf('<option selected value="%d">%d год</option>', $i, $i);
+                          } else {
+                          printf('<option value="%d">%d год</option>', $i, $i);
+                          }
                         }
                         ?>
                     </select>
@@ -69,40 +92,39 @@
 
 
       <div class="form-item">
-        <p>Пол:</p>
         <ul>
         <li>
-            <input type="radio" id="radioF" name="sex" value="female">
+            <input type="radio" id="radioF" name="sex" value="female" <?php if ($values['sex'] == 'female') {print 'checked';} ?>>
             <label for="radioFemale">Женский</label>
           </li>
           <li>
-            <input type="radio" id="radioM" name="sex" value="male" checked>
+            <input type="radio" id="radioM" name="sex" value="male" <?php if ($values['sex'] == 'male') {print 'checked';} ?>>>
             <label for="radioMale">Мужской</label>
           </li>
         </ul>
       </div>
 
       <div class="form-item">
-        <p>Любимый язык программирования:</p>
+        <p <?php if ($errors['langP1']||$errors['langP2']) {print 'class="error"';}?>>Любимый язык программирования:</p>
         <ul>
           <li>
-            <input type="checkbox" id="Python" name="lang[]" value='Python'>
+            <input type="checkbox" id="Python" name="lang[]" value='Python' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('Python', unserialize($values['lang']))) {print 'checked';}?>`>
             <label for="Python">Python</label>
           </li>
           <li>
-            <input type="checkbox" id="JS" name="lang[]" value='JS'>
+            <input type="checkbox" id="JS" name="lang[]" value='JS' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('JS', unserialize($values['lang']))) {print 'checked';}?>>
             <label for="JS">JS</label>
           </li>
           <li>
-            <input type="checkbox" id="C++" name="lang[]" value='C++'>
+            <input type="checkbox" id="C++" name="lang[]" value='C++' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('C++', unserialize($values['lang']))) {print 'checked';}?>>
             <label for="C++">C++</label>
           </li>
           <li>
-            <input type="checkbox" id="Java" name="lang[]" value='Java'>
+            <input type="checkbox" id="Java" name="lang[]" value='Java' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('Java', unserialize($values['lang']))) {print 'checked';}?>>
             <label for="Java">Java</label>
           </li>
           <li>
-            <input type="checkbox" id="PHP" name="lang[]" value='PHP'>
+            <input type="checkbox" id="PHP" name="lang[]" value='PHP' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('PHP', unserialize($values['lang']))) {print 'checked';}?>>
             <label for="PHP">PHP</label>
           </li>
         </ul>
@@ -110,16 +132,15 @@
 
       
       <div class="form-item">
-        <p class="big-text">Расскажи о себе:</p>
-        <p class="small-text">(макс. 128 символов)</p>
-        <textarea name="biography" cols=24 rows=4 maxlength=128 spellcheck="false"></textarea>
+        <p class="big-text <?php if ($errors['biography1'] || $errors['biography2']) {print 'error';} ?>"> Расскажи о себе:</p>
+        <textarea name="biography" cols=24 rows=4 maxlength=128 spellcheck="false"><?php if (!empty($values['biography'])) {print $values['biography'];} ?></textarea>
       </div>
-    </div>  
+    </div>
 
     <div class="send">
       <div class="contract">
-        <input type="checkbox" id="checkboxContract" name="checkboxContract">
-        <label for="checkboxContract">С контрактом ознакомлен</label>
+        <input type="checkbox" id="checkboxContract" name="checkboxContract" <?php if ($values['checkboxContract'] == '1') {print 'checked';} ?>>
+        <label for="checkboxContract" <?php if ($errors['checkboxContract']) {print 'class="error"';} ?>>С контрактом ознакомлен</label>
       </div>
       <input class="btn" type="submit" name="submit" value="Отправить" />
     </div>
