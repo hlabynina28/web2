@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $year = $_POST['year'];
   $sex = $_POST['sex'];
   if(isset($_POST["lang"])) {
-    $abilities = $_POST["lang"];
+    $lang = $_POST["lang"];
     $filtred_lang = array_filter($lang,
     function($value) {
       return($value == 'Python' || $value == 'JS' || $value == 'Java'|| $value == 'C++'|| $value == 'PHP');
