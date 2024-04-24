@@ -94,7 +94,7 @@
       <div class="form-item">
         <ul>
         <li>
-            <input type="radio" id="radioF" name="sex" value="female" <?php if ($values['sex'] == 'female') {print 'checked';} ?>>
+            <input type="radio" id="radioF" name="sex" value="female" checked <?php if ($values['sex'] == 'female') {print 'checked';} ?>>
             <label for="radioFemale">Женский</label>
           </li>
           <li>
