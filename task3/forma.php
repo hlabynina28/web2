@@ -98,8 +98,8 @@
             <label for="radioFemale">Женский</label>
           </li>
           <li>
-            <input type="radio" id="radioM" name="sex" value="male" <?php if ($values['sex'] == 'male') {print 'checked';} ?>>>
-            <label for="radioMale">Мужской</label>
+            <input type="radio" id="radioM" name="sex" value="male" <?php if ($values['sex'] == 'male') {print 'checked';} ?>>
+            <label for="radioMale"> Мужской</label>
           </li>
         </ul>
       </div>
