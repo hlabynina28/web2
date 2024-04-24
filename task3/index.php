@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['lang'] = empty($_COOKIE['lang_value']) ? '' : $_COOKIE['lang_value'];
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
   $values['checkboxContract'] = empty($_COOKIE['checkboxContract_value']) ? '' : $_COOKIE['checkboxContract_value'];
-  include('form.php');
+  include('forma.php');
 } else {
   $errors = FALSE;
 
