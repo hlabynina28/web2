@@ -105,7 +105,7 @@
       </div>
 
       <div class="form-item">
-        <p <?php if ($errors['langP1']||$errors['langP2']) {print 'class="error"';}?>>Любимый язык программирования:</p>
+        <p <?php if ($errors['lang']) {print 'class="error"';}?>>Любимый язык программирования:</p>
         <ul>
           <li>
             <input type="checkbox" id="Python" name="lang[]" value='Python' <?php if (isset($values['lang']) && !empty($values['lang']) && in_array('Python', unserialize($values['lang']))) {print 'checked';}?>`>
