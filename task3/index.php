@@ -2,13 +2,25 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 
+$user = 'u59174';
+$pass = '4061054';
+$db = new PDO('mysql:host=localhost;dbname=u59174', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $messages = array();
+  $messages1 = array();
   if (!empty($_COOKIE['save'])) {
-      setcookie('save', '', 100000);
-      $messages[] = '<div class="good">Спасибо, результаты сохранены</div>';
+    setcookie('save', '', 100000);
+    $messages1['allok'] = '<div class="good">Спасибо, результаты сохранены</div>';
+    if (!empty($_COOKIE['password'])) {
+      $messages1['login'] = sprintf('<div class="login">Логин: <strong>%s</strong><br>
+        Пароль: <strong>%s</strong><br>Войдите в аккаунт с этими данными,<br>чтобы изменить введёные значения формы</div>',
+        strip_tags($_COOKIE['login']),
+        strip_tags($_COOKIE['password']));
+    }
+    setcookie('login', '', 100000);
+    setcookie('password', '', 100000);
   }
-
   $errors = array();
   $errors['name'] = !empty($_COOKIE['name_error']);
   $errors['tel']=!empty($_COOKIE['tel_error']);
@@ -23,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $errors['biography1'] = !empty($_COOKIE['biography_error1']);
   $errors['biography2'] = !empty($_COOKIE['biography_error2']);
   $errors['checkboxContract'] = !empty($_COOKIE['checkboxContract_error']);
-
+ 
   if ($errors['name']) {
     setcookie('name_error', '', 100000);
     $messages['name'] = '<p class="msg">Заполните имя</p>';
@@ -91,7 +103,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['lang'] = empty($_COOKIE['lang_value']) ? '' : $_COOKIE['lang_value'];
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
   $values['checkboxContract'] = empty($_COOKIE['checkboxContract_value']) ? '' : $_COOKIE['checkboxContract_value'];
-  include('forma.php');
+  
+  if (count(array_filter($errors)) === 0 && !empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+    $login = $_SESSION['login'];
+    try {
+      $stmt = $db->prepare("SELECT application_id FROM users WHERE login = ?");
+      $stmt->execute([$login]);
+      $app_id = $stmt->fetchColumn();
+
+      $stmt = $db->prepare("SELECT name, phone, email, day, month, year, sex, bio FROM application WHERE application_id = ?");
+      $stmt->execute([$app_id]);
+      $dates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      $stmt = $db->prepare("SELECT lan FROM lang WHERE application_id = ?");
+      $stmt->execute([$app_id]);
+      $lang = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+      if (!empty($dates[0]['name'])) {
+        $values['name'] = htmlspecialchars(strip_tags($dates[0]['name']));
+      }
+      if (!empty($dates[0]['phone'])) {
+        $values['tel'] = htmlspecialchars(strip_tags($dates[0]['phone']));
+      }
+      if (!empty($dates[0]['email'])) {
+        $values['email'] = htmlspecialchars(strip_tags($dates[0]['email']));
+      }
+      if (!empty($dates[0]['day'])) {
+        $values['day'] = htmlspecialchars(strip_tags($dates[0]['day']));
+      }
+      if (!empty($dates[0]['month'])) {
+        $values['month'] = htmlspecialchars(strip_tags($dates[0]['month']));
+      }
+      if (!empty($dates[0]['year'])) {
+        $values['year'] = htmlspecialchars(strip_tags($dates[0]['year']));
+      }
+      if (!empty($dates[0]['sex'])) {
+        $values['sex'] = htmlspecialchars(strip_tags($dates[0]['sex']));
+      }
+      if (!empty($lang)) {
+        $values['lang'] =  serialize($lang);
+      }
+      if (!empty($dates[0]['bio'])) {
+        $values['biography'] = htmlspecialchars(strip_tags($dates[0]['bio']));
+      }
+
+    } catch (PDOException $e) {
+        print('Error : ' . $e->getMessage());
+        exit();
+    }
+
+    printf('<div id="header"><p>Вход с логином %s; uid: %d</p><a href=logout.php>Выйти</a></div>', $_SESSION['login'], $_SESSION['uid']);
+  }
+  include('form.php');
 } else {
   $errors = FALSE;
 
@@ -202,23 +266,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 
 
+  if (!empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
+    if (!empty($_POST['token']) && hash_equals($_POST['token'], $_SESSION['token'])) {
+    $login = $_SESSION['login'];
+    try {
+      $stmt = $db->prepare("SELECT application_id FROM users WHERE login = ?");
+      $stmt->execute([$login]);
+      $app_id = $stmt->fetchColumn();
 
-$user = 'u59174';
-$pass = '4061054';
-$db = new PDO('mysql:host=localhost;dbname=u59174', $user, $pass, array(PDO::ATTR_PERSISTENT => true));
+      $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, gender = ?, hand = ?, biography = ?
+        WHERE application_id = ?");
+      $stmt->execute([$name, $email, $year, $gender, $hand, $biography, $app_id]);
 
-try {
-  $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, bio) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
-  $stmt->execute([$name, $tel, $email, $day, $month, $year, $sex, $biography]);
-  $application_id = $db->lastInsertId();
-  $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
-  foreach ($lang as $lan) {
-    $stmt->execute([$application_id, $lan]);
+      $stmt = $db->prepare("SELECT superpower_id FROM abilities WHERE application_id = ?");
+      $stmt->execute([$app_id]);
+      $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+      if (array_diff($abil, $abilities)) {
+        $stmt = $db->prepare("DELETE FROM abilities WHERE application_id = ?");
+        $stmt->execute([$app_id]);
+
+        $stmt = $db->prepare("INSERT INTO abilities (application_id, superpower_id) VALUES (?, ?)");
+        foreach ($abilities as $superpower_id) {
+          $stmt->execute([$app_id, $superpower_id]);
+        }
+      }
+
+    } catch (PDOException $e) {
+        print('Error : ' . $e->getMessage());
+        exit();
+    }
+    } else {
+        die('Ошибка CSRF: недопустимый токен');
+    }
   }
-} catch (PDOException $e) {
-  print('Error : ' . $e->getMessage());
-  exit();
-}
-setcookie('save', '1');
-header('Location: index.php');
+  else {
+    $login = 'user' . rand(1, 1000);
+    $password = rand(1, 100);
+    setcookie('login', $login);
+    setcookie('password', $password);
+    try {
+      $stmt = $db->prepare("INSERT INTO application (name, phone, email, day, month, year, sex, bio) VALUES (?, ?, ?, ?, ?, ?,?, ?)");
+      $stmt->execute([$name, $tel, $email, $day, $month, $year, $sex, $biography]);
+      $application_id = $db->lastInsertId();
+      $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
+      foreach ($lang as $lan) {
+        $stmt->execute([$application_id, $lan]);
+      }
+    } catch (PDOException $e) {
+      print('Error : ' . $e->getMessage());
+      exit();
+    }
+  }
+
+  setcookie('save', '1');
+  header('Location: ./');
 }

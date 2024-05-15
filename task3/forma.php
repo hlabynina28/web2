@@ -10,22 +10,30 @@
 </head>
 
 <body>
+<?php
+  if (!empty($messages1['allok'])) {
+    print($messages1['allok']);
+  }
+  if (!empty($messages1['login'])) {
+    print($messages1['login']);
+  }
+  if (empty($_SESSION['login'])) {
+    ?>
+      <div id="header"><a href=login.php>Войти</a></div>
+    <?php
+  }
+  if (!empty($messages)) {
+    print('<div id="messages">');
+    foreach ($messages as $message) {
+      print($message);
+    }
+    print('</div>');
+  }
+  ?>
   <form action="" method="POST">
     <div class="form-head">
         <h1>Форма!</h1>
     </div>
-
-    <?php
-    if (!empty($messages)) {
-      print('<div id="messages">');
-      // Выводим все сообщения.
-      foreach ($messages as $message) {
-        print($message);
-      }
-      print('</div>');
-    }
-    ?>
-
     <div class="form-content">
         
       <div class="form-item">
@@ -142,10 +150,11 @@
         <input type="checkbox" id="checkboxContract" name="checkboxContract" <?php if ($values['checkboxContract'] == '1') {print 'checked';} ?>>
         <label for="checkboxContract" <?php if ($errors['checkboxContract']) {print 'class="error"';} ?>>С контрактом ознакомлен</label>
       </div>
+      <?php if (!empty($_SESSION['login'])) {echo '<input type="hidden" name="token" value="' . $_SESSION["token"] . '">'; } ?>
       <input class="btn" type="submit" name="submit" value="Отправить" />
     </div>
   </form>
 
-</body> 
+</body>
 
 </html>
