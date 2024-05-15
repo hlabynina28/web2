@@ -274,21 +274,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $stmt->execute([$login]);
       $app_id = $stmt->fetchColumn();
 
-      $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, gender = ?, hand = ?, biography = ?
+      $stmt = $db->prepare("UPDATE application SET name = ?,phone = ?, email = ?,day = ?, month = ?, year = ?, sex = ?,  biography = ?
         WHERE application_id = ?");
-      $stmt->execute([$name, $email, $year, $gender, $hand, $biography, $app_id]);
+      $stmt->execute([$name,$tel, $email,$day,$month, $year, $sex, $biography, $app_id]);
 
-      $stmt = $db->prepare("SELECT superpower_id FROM abilities WHERE application_id = ?");
+      $stmt = $db->prepare("SELECT lan FROM lang WHERE application_id = ?");
       $stmt->execute([$app_id]);
-      $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+      $la = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-      if (array_diff($abil, $abilities)) {
-        $stmt = $db->prepare("DELETE FROM abilities WHERE application_id = ?");
+      if (array_diff($la, $lang)) {
+        $stmt = $db->prepare("DELETE FROM lang WHERE application_id = ?");
         $stmt->execute([$app_id]);
 
-        $stmt = $db->prepare("INSERT INTO abilities (application_id, superpower_id) VALUES (?, ?)");
-        foreach ($abilities as $superpower_id) {
-          $stmt->execute([$app_id, $superpower_id]);
+        $stmt = $db->prepare("INSERT INTO lang (application_id, lan) VALUES (?, ?)");
+        foreach ($lang as $lan) {
+          $stmt->execute([$app_id, $lan]);
         }
       }
 
