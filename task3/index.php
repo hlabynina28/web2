@@ -274,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $stmt->execute([$login]);
       $app_id = $stmt->fetchColumn();
 
-      $stmt = $db->prepare("UPDATE application SET name = ?,phone = ?, email = ?,day = ?, month = ?, year = ?, sex = ?,  biography = ?
+      $stmt = $db->prepare("UPDATE application SET name = ?,phone = ?, email = ?,day = ?, month = ?, year = ?, sex = ?,  bio = ?
         WHERE application_id = ?");
       $stmt->execute([$name,$tel, $email,$day,$month, $year, $sex, $biography, $app_id]);
 
@@ -302,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
   else {
     $login = 'user' . rand(1, 1000);
-    $password = rand(1, 100);
+    $password = rand(1, 1000);
     setcookie('login', $login);
     setcookie('password', $password);
     try {
