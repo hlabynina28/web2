@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     printf('<div id="header"><p>Вход с логином %s; uid: %d</p><a href=logout.php>Выйти</a></div>', $_SESSION['login'], $_SESSION['uid']);
   }
-  include('form.php');
+  include('forma.php');
 } else {
   $errors = FALSE;
 
