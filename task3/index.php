@@ -266,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     setcookie('checkboxContract_error', '', 100000);
   }
 
-
+  setcookie('login_error1',empty($_SESSION['login'] ), 100000);
   if (!empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
     if (!empty($_POST['token']) && hash_equals($_POST['token'], $_SESSION['token'])) {
     $login = $_SESSION['login'];
