@@ -107,6 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if (count(array_filter($errors)) === 0 && !empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
     $_SESSION['token'] = bin2hex(random_bytes(32));
     $login = $_SESSION['login'];
+    setcookie('login_error',empty($_SESSION['login'] ), 100000);
     try {
       $stmt = $db->prepare("SELECT application_id FROM users WHERE login = ?");
       $stmt->execute([$login]);
