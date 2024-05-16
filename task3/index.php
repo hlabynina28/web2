@@ -313,6 +313,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       foreach ($lang as $lan) {
         $stmt->execute([$application_id, $lan]);
       }
+      $stmt = $db->prepare("INSERT INTO users (application_id, login, password) VALUES (?, ?, ?)");
+      $stmt->execute([$application_id, $login, md5($password)]);
     } catch (PDOException $e) {
       print('Error : ' . $e->getMessage());
       exit();
