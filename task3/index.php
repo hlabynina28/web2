@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
   $values['checkboxContract'] = empty($_COOKIE['checkboxContract_value']) ? '' : $_COOKIE['checkboxContract_value'];
   setcookie('login_error',empty($_SESSION['login'] ), 100000);
-  if (count(array_filter($errors)) === 0 && !empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
+  if (!empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])){
     $_SESSION['token'] = bin2hex(random_bytes(32));
     $login = $_SESSION['login'];
  
